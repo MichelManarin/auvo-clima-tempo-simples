@@ -2,14 +2,15 @@
 
 ![auvo-clima-simples](https://user-images.githubusercontent.com/6588753/192535268-2ea9861f-d7e9-4032-bde3-afd1c2f94ca7.png)
 
-É necessário alterar o connectionDatabase conforme seu database.
+# É necessário alterar o connectionDatabase conforme seu database.
 
+# Comandos
 
 insert into dbo.Estado (Id, Nome, UF)
 values (1, 'Santa Catarina', 'SC')
 
 insert into dbo.Cidade (Id, Nome, EstadoId)
-values (1, 'Urussnga', 1)
+values (1, 'Urussanga', 1)
 
 insert into dbo.Cidade (Id, Nome, EstadoId)
 values (2, 'Blumenau', 1)
