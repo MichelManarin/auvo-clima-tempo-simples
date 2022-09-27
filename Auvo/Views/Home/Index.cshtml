@@ -1,0 +1,118 @@
+﻿@model Auvo.Models.ViewModel.ConsultaPrevisao
+
+@{
+    ViewData["Title"] = "Clima Tempo Simples";
+}
+
+<div class="header-content">
+    <div class="container mt-1">
+        <div class="row d-flex">
+            <div class="col-12 col-md-6">
+                <h2 class="text-white">Consulta de clima</h2>
+                <h6>Consulta de clima das suas cidades configuradas</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="box-filter box-shadow">
+        <div class="row">
+            <div class="col col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        Cidades mais quentes hoje
+                    </div>
+                    <div class="card-body">
+                        @if (Model != null){
+                            foreach (var previsao in Model.previsaoClimaHoje?.OrderByDescending(x => x.TemperaturaMaxima))
+                            {
+                                <div class="row">
+                                    <div class="col">
+                                        @String.Format("{0}", previsao.Cidade.Nome)
+                                    </div>
+                                    <div class="col">
+                                        @String.Format("Min {0}°C", previsao.TemperaturaMinima)
+                                    </div>
+                                    <div class="col">
+                                        @String.Format("Max {0}°C", previsao.TemperaturaMaxima)
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col col-md-6 col-sm-12 col-12">
+                <div class="card">
+                    <div class="card-header">
+                        Cidades mais frias hoje
+                    </div>
+                    <div class="card-body">
+                        @if (Model != null)
+                        {
+                            foreach (var previsao in Model.previsaoClimaHoje?.OrderBy(x => x.TemperaturaMaxima))
+                            {
+                                <div class="row">
+                                    <div class="col">
+                                        @String.Format("{0}", previsao.Cidade.Nome)
+                                    </div>
+                                    <div class="col">
+                                        @String.Format("Min {0}°C", previsao.TemperaturaMinima)
+                                    </div>
+                                    <div class="col">
+                                        @String.Format("Max {0}°C", previsao.TemperaturaMaxima)
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr />
+
+        <div class="col-sm-6 col-md-4 col-lg-3 offset-sm-6 offset-md-8 offset-lg-9 mt-2 mb-3">
+            @using (Html.BeginForm("Index","Home", FormMethod.Get))
+            {
+                @Html.LabelFor(model=>model.cidadeSelecionada, "Cidade:")
+                @Html.DropDownListFor(model => model.cidadeSelecionada, (SelectList)ViewBag.ListaCidades, "Selecione uma cidade", new { @class = "form-control form-control-md label-form", onchange = @"form.submit();" })
+            }
+        </div>
+
+        @if (Model?.cidadeSelecionada != null && Model?.previsaoFutura?.Count() > 0){
+
+            <div class="row justify-content-md-center">
+
+                <h5 class="text-center mt-1 mb-3">
+                    @String.Format("Clima para os proximos dias de {0}", ViewBag.CidadeNome)
+                </h5>
+
+                @foreach (var previsao in Model.previsaoFutura?.OrderBy(x => x.DataPrevisao))
+                {
+                    <div class="col col-md-3 col-sm-12">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                @System.Threading.Thread.CurrentThread.CurrentUICulture.DateTimeFormat.GetDayName(previsao.DataPrevisao.DayOfWeek)
+                            </div>
+                            <div class="card-body">
+                                <h6>@previsao.Clima</h6>
+                                <div class="row">
+                                    <div class="col-12">
+                                        @String.Format("Min {0}°C", previsao.TemperaturaMinima)
+                                    </div>
+                                    <div class="col-12">
+                                        @String.Format("Max {0}°C", previsao.TemperaturaMaxima)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        } else {
+            <h5 class="text-center text-secondary">Sem informação</h5>
+        }
+    </div>
+</div>
